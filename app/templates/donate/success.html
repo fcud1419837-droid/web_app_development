@@ -1,0 +1,42 @@
+{% extends 'layout.html' %}
+{% block title %}感謝您的香油錢 — 神諭殿{% endblock %}
+
+{% block head %}
+<style>
+  @keyframes shine {
+    0%   { transform: scale(1); }
+    50%  { transform: scale(1.15); }
+    100% { transform: scale(1); }
+  }
+  .shine-icon { animation: shine 1.5s ease-in-out infinite; display:inline-block; }
+</style>
+{% endblock %}
+
+{% block content %}
+<div class="row justify-content-center">
+  <div class="col-md-6 col-lg-5 text-center">
+    <div class="card-temple p-5">
+      <div class="shine-icon mb-3" style="font-size:4rem;">🙏</div>
+      <h1 style="color:var(--gold); font-size:1.8rem; margin-bottom:.5rem;">感謝您的虔誠心意！</h1>
+      <p style="color:var(--text-muted);">
+        {% if amount %}
+          您捐獻了 <strong style="color:var(--gold);">NT${{ amount }}</strong> 香油錢，
+        {% endif %}
+        神明已收到您的心意，必將保佑您平安順遂、萬事如意。
+      </p>
+      <hr class="divider-gold">
+      <p style="color:var(--text-muted); font-size:.9rem; font-style:italic; letter-spacing:1px;">
+        「心誠則靈，問神問己。」
+      </p>
+      <div class="d-flex flex-column gap-2 mt-3">
+        <a href="{{ url_for('fortune.draw') }}" class="btn btn-gold">
+          <i class="bi bi-stars me-2"></i>繼續求籤問神
+        </a>
+        <a href="{{ url_for('main.index') }}" class="btn btn-outline-gold">
+          <i class="bi bi-house me-2"></i>回到首頁
+        </a>
+      </div>
+    </div>
+  </div>
+</div>
+{% endblock %}

@@ -1,20 +1,25 @@
-from flask import Blueprint
+from flask import Blueprint, render_template, g
+from app.models.record import Record
+from app.routes.auth import login_required
 
 main_bp = Blueprint('main', __name__)
+
 
 @main_bp.route('/')
 def index():
     """
-    處理首頁請求，判斷是否已登入來決定顯示登入狀態。
-    回傳首頁模板 'index.html'。
+    首頁：顯示系統介紹與功能入口。
+    已登入時顯示歡迎訊息，未登入顯示引導連結。
     """
-    pass
+    return render_template('index.html')
+
 
 @main_bp.route('/profile/history')
+@login_required
 def history():
     """
-    顯示會員所有的抽籤與測算紀錄。
-    必須檢查會員是否已經登入，未登入則導向登入頁面。
-    呼叫 Record model 取得過去歷程，並渲染 'profile/history.html'。
+    會員歷史紀錄頁：列出目前登入使用者的所有抽籤紀錄。
+    需要登入（由 login_required 裝飾器把關）。
     """
-    pass
+    records = Record.get_by_user_id(g.user.id)
+    return render_template('profile/history.html', records=records)

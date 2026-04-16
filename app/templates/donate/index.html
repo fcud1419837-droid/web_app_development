@@ -1,0 +1,75 @@
+{% extends 'layout.html' %}
+{% block title %}捐獻香油錢 — 神諭殿{% endblock %}
+
+{% block content %}
+<div class="text-center mb-5">
+  <div class="float-anim" style="font-size:3.5rem; margin-bottom:.5rem;">🕯️</div>
+  <h1 style="color:var(--gold); font-family:'Cinzel Decorative',serif; font-size:1.8rem;">捐獻香油錢</h1>
+  <p style="color:var(--text-muted);">以小小心意回報神明，讓神諭殿得以長久守護眾生</p>
+</div>
+
+<div class="row justify-content-center g-4">
+
+  <!-- 捐款金額選項 -->
+  <div class="col-md-6">
+    <div class="card-temple p-4 h-100">
+      <h5 style="color:var(--gold); margin-bottom:1.5rem;"><i class="bi bi-gift me-2"></i>選擇捐款金額</h5>
+      <form method="POST" action="{{ url_for('donate.success') }}" id="donate-form">
+        <!-- 金額快選 -->
+        <div class="d-flex flex-wrap gap-2 mb-3">
+          {% for amt in [100, 300, 500, 1000] %}
+          <button type="button" class="btn btn-outline-gold btn-sm amount-btn" data-amount="{{ amt }}"
+                  onclick="selectAmount({{ amt }})">
+            NT${{ amt }}
+          </button>
+          {% endfor %}
+        </div>
+        <!-- 自訂金額 -->
+        <div class="mb-4">
+          <label for="amount" class="form-label">捐款金額（新台幣）</label>
+          <div class="input-group">
+            <span class="input-group-text" style="background:#0f0c06; border-color:var(--border); color:var(--text-muted);">NT$</span>
+            <input type="number" id="amount" name="amount" class="form-control"
+                   placeholder="請輸入金額" min="1" required>
+          </div>
+        </div>
+        <button type="submit" class="btn btn-gold w-100">
+          <i class="bi bi-heart-fill me-2"></i>確認捐獻
+        </button>
+      </form>
+    </div>
+  </div>
+
+  <!-- 匯款資訊 -->
+  <div class="col-md-5">
+    <div class="card-temple p-4 mb-3">
+      <h5 style="color:var(--gold); margin-bottom:1rem;"><i class="bi bi-bank me-2"></i>銀行轉帳</h5>
+      <table class="table table-borderless mb-0" style="color:var(--text-muted); font-size:.9rem;">
+        <tr><td style="width:5rem;">銀行</td><td style="color:var(--text);">玉山銀行 (808)</td></tr>
+        <tr><td>帳號</td><td style="color:var(--text);">1234-5678-9012-3456</td></tr>
+        <tr><td>戶名</td><td style="color:var(--text);">神諭殿管理委員會</td></tr>
+      </table>
+    </div>
+    <div class="card-temple p-4">
+      <h5 style="color:var(--gold); margin-bottom:1rem;"><i class="bi bi-qr-code me-2"></i>行動支付</h5>
+      <p style="color:var(--text-muted); font-size:.9rem; margin:0;">
+        支援 街口支付、LINE Pay、Pi 錢包。<br>
+        轉帳帳號：<strong style="color:var(--text);">@shenyudian</strong>
+      </p>
+    </div>
+  </div>
+
+</div>
+{% endblock %}
+
+{% block scripts %}
+<script>
+function selectAmount(amount) {
+  document.getElementById('amount').value = amount;
+  document.querySelectorAll('.amount-btn').forEach(btn => {
+    btn.classList.toggle('btn-gold', btn.dataset.amount == amount);
+    btn.classList.toggle('btn-outline-gold', btn.dataset.amount != amount);
+  });
+}
+</script>
+{% endblock %}

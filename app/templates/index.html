@@ -1,0 +1,59 @@
+{% extends 'layout.html' %}
+{% block title %}神諭殿 — 線上算命、求籤問神{% endblock %}
+
+{% block content %}
+<!-- Hero Section -->
+<section class="text-center py-5 mb-4">
+  <div class="float-anim mb-4" style="font-size:5rem;">🏮</div>
+  <h1 class="mb-2" style="font-family:'Cinzel Decorative',serif; color:var(--gold); font-size:2.5rem; letter-spacing:4px;">
+    神諭殿
+  </h1>
+  <p class="mb-1" style="color:var(--text-muted); font-size:1.1rem; letter-spacing:2px;">
+    打破時空限制，隨時隨地求籤問神
+  </p>
+  <hr class="divider-gold">
+  {% if g.user %}
+    <p class="mb-4" style="color:var(--text-muted);">歡迎回來，<strong style="color:var(--gold);">{{ g.user.username }}</strong>！神明正等待您的叩問。</p>
+    <a href="{{ url_for('fortune.draw') }}" class="btn btn-gold btn-lg px-5">
+      <i class="bi bi-stars me-2"></i>開始求籤
+    </a>
+  {% else %}
+    <p class="mb-4" style="color:var(--text-muted);">登入後即可開始求籤，紀錄您的每一筆運勢軌跡。</p>
+    <div class="d-flex justify-content-center gap-3">
+      <a href="{{ url_for('auth.login') }}" class="btn btn-gold btn-lg px-4">
+        <i class="bi bi-person me-2"></i>登入
+      </a>
+      <a href="{{ url_for('auth.register') }}" class="btn btn-outline-gold btn-lg px-4">
+        <i class="bi bi-person-plus me-2"></i>免費註冊
+      </a>
+    </div>
+  {% endif %}
+</section>
+
+<!-- Feature Cards -->
+<section class="mb-5">
+  <div class="row g-4 justify-content-center">
+    <div class="col-md-4">
+      <div class="card-temple p-4 text-center h-100">
+        <div style="font-size:2.5rem; margin-bottom:1rem;">🎋</div>
+        <h3 style="color:var(--gold); font-size:1.2rem;">宮廟求籤</h3>
+        <p style="color:var(--text-muted); font-size:.9rem;">傳承古法，線上完成求籤與擲筊，取得神明的指引。</p>
+      </div>
+    </div>
+    <div class="col-md-4">
+      <div class="card-temple p-4 text-center h-100">
+        <div style="font-size:2.5rem; margin-bottom:1rem;">📜</div>
+        <h3 style="color:var(--gold); font-size:1.2rem;">歷史紀錄</h3>
+        <p style="color:var(--text-muted); font-size:.9rem;">每次抽籤自動儲存，隨時回顧運勢的變化軌跡。</p>
+      </div>
+    </div>
+    <div class="col-md-4">
+      <div class="card-temple p-4 text-center h-100">
+        <div style="font-size:2.5rem; margin-bottom:1rem;">🕯️</div>
+        <h3 style="color:var(--gold); font-size:1.2rem;">捐香油錢</h3>
+        <p style="color:var(--text-muted); font-size:.9rem;">以小小心意回報神明，讓系統得以長久運作。</p>
+      </div>
+    </div>
+  </div>
+</section>
+{% endblock %}

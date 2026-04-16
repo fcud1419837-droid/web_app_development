@@ -1,0 +1,226 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="description" content="線上算命系統 — 隨時隨地抽籤問神，獲得神明的指引與祝福。" />
+  <title>{% block title %}神諭殿 — 線上算命{% endblock %}</title>
+
+  <!-- Google Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Noto+Serif+TC:wght@400;600;700&family=Cinzel+Decorative:wght@400;700&display=swap" rel="stylesheet">
+
+  <!-- Bootstrap 5 -->
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+  <!-- Bootstrap Icons -->
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css" rel="stylesheet">
+
+  <style>
+    :root {
+      --gold:       #d4a843;
+      --gold-light: #f0c96b;
+      --dark-bg:    #0d0a07;
+      --card-bg:    #1a1208;
+      --border:     #3d2e0f;
+      --text:       #e8d8b4;
+      --text-muted: #9e8558;
+    }
+
+    * { box-sizing: border-box; }
+
+    body {
+      background-color: var(--dark-bg);
+      color: var(--text);
+      font-family: 'Noto Serif TC', serif;
+      min-height: 100vh;
+      background-image:
+        radial-gradient(ellipse 80% 50% at 50% -10%, rgba(212,168,67,.18) 0%, transparent 70%);
+    }
+
+    /* ── Navbar ── */
+    .navbar {
+      background: rgba(13,10,7,.92);
+      border-bottom: 1px solid var(--border);
+      backdrop-filter: blur(10px);
+    }
+    .navbar-brand {
+      font-family: 'Cinzel Decorative', serif;
+      color: var(--gold) !important;
+      font-size: 1.3rem;
+      letter-spacing: 2px;
+    }
+    .navbar-brand:hover { color: var(--gold-light) !important; }
+    .nav-link { color: var(--text-muted) !important; transition: color .2s; }
+    .nav-link:hover, .nav-link.active { color: var(--gold) !important; }
+
+    /* ── Cards ── */
+    .card-temple {
+      background: var(--card-bg);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      box-shadow: 0 0 40px rgba(212,168,67,.08);
+      transition: box-shadow .3s;
+    }
+    .card-temple:hover { box-shadow: 0 0 60px rgba(212,168,67,.15); }
+
+    /* ── Buttons ── */
+    .btn-gold {
+      background: linear-gradient(135deg, #b8860b, var(--gold));
+      color: #1a0f00;
+      border: none;
+      font-weight: 700;
+      letter-spacing: 1px;
+      transition: all .3s;
+    }
+    .btn-gold:hover {
+      background: linear-gradient(135deg, var(--gold), var(--gold-light));
+      transform: translateY(-2px);
+      box-shadow: 0 6px 20px rgba(212,168,67,.4);
+      color: #1a0f00;
+    }
+    .btn-outline-gold {
+      border: 1px solid var(--gold);
+      color: var(--gold);
+      background: transparent;
+      transition: all .3s;
+    }
+    .btn-outline-gold:hover {
+      background: var(--gold);
+      color: #1a0f00;
+      transform: translateY(-2px);
+    }
+
+    /* ── Forms ── */
+    .form-control, .form-select {
+      background: #0f0c06;
+      border: 1px solid var(--border);
+      color: var(--text);
+      border-radius: 8px;
+    }
+    .form-control:focus, .form-select:focus {
+      background: #0f0c06;
+      border-color: var(--gold);
+      color: var(--text);
+      box-shadow: 0 0 0 3px rgba(212,168,67,.2);
+    }
+    .form-label { color: var(--text-muted); font-size: .9rem; }
+
+    /* ── Flash Messages ── */
+    .alert-success { background: #1a2e1a; border-color: #2d5a2d; color: #7dc97d; }
+    .alert-danger  { background: #2e1a1a; border-color: #5a2d2d; color: #c97d7d; }
+    .alert-warning { background: #2e2a1a; border-color: #5a4a2d; color: #c9b07d; }
+    .alert-info    { background: #1a2530; border-color: #2d4a5a; color: #7dadc9; }
+
+    /* ── Divider ── */
+    .divider-gold {
+      border: none;
+      height: 1px;
+      background: linear-gradient(to right, transparent, var(--gold), transparent);
+      margin: 2rem 0;
+      opacity: .5;
+    }
+
+    /* ── Footer ── */
+    footer {
+      border-top: 1px solid var(--border);
+      color: var(--text-muted);
+      font-size: .85rem;
+      padding: 1.5rem 0;
+      text-align: center;
+    }
+
+    /* ── Lot type badge ── */
+    .badge-lot {
+      font-size: .85rem;
+      padding: .4em .9em;
+      border-radius: 20px;
+      font-weight: 600;
+    }
+    .badge-大吉 { background: #2d4a1a; color: #90e07a; border: 1px solid #4a7a2d; }
+    .badge-中吉 { background: #1a3a2a; color: #7acfb0; border: 1px solid #2d6a4a; }
+    .badge-小吉 { background: #2a3a1a; color: #c9d87a; border: 1px solid #4a5a2d; }
+    .badge-下下 { background: #3a1a1a; color: #cf7a7a; border: 1px solid #6a2d2d; }
+    .badge-default { background: #2a2a1a; color: #c9c07a; border: 1px solid #5a4a2d; }
+
+    /* ── Floating orb animation ── */
+    @keyframes float { 0%,100%{transform:translateY(0)} 50%{transform:translateY(-10px)} }
+    .float-anim { animation: float 4s ease-in-out infinite; }
+  </style>
+
+  {% block head %}{% endblock %}
+</head>
+<body>
+
+<!-- ── Navbar ── -->
+<nav class="navbar navbar-expand-lg sticky-top">
+  <div class="container">
+    <a class="navbar-brand" href="{{ url_for('main.index') }}">🏮 神諭殿</a>
+    <button class="navbar-toggler border-0" type="button" data-bs-toggle="collapse" data-bs-target="#navMenu">
+      <span class="navbar-toggler-icon"></span>
+    </button>
+    <div class="collapse navbar-collapse" id="navMenu">
+      <ul class="navbar-nav ms-auto align-items-center gap-1">
+        <li class="nav-item">
+          <a class="nav-link" href="{{ url_for('fortune.draw') }}">
+            <i class="bi bi-stars me-1"></i>求籤問卦
+          </a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" href="{{ url_for('donate.index') }}">
+            <i class="bi bi-heart me-1"></i>捐香油錢
+          </a>
+        </li>
+        {% if g.user %}
+          <li class="nav-item">
+            <a class="nav-link" href="{{ url_for('main.history') }}">
+              <i class="bi bi-clock-history me-1"></i>歷史紀錄
+            </a>
+          </li>
+          <li class="nav-item ms-2">
+            <a class="btn btn-outline-gold btn-sm" href="{{ url_for('auth.logout') }}">
+              <i class="bi bi-box-arrow-right me-1"></i>登出
+            </a>
+          </li>
+        {% else %}
+          <li class="nav-item ms-2">
+            <a class="btn btn-gold btn-sm" href="{{ url_for('auth.login') }}">
+              <i class="bi bi-person me-1"></i>登入 / 註冊
+            </a>
+          </li>
+        {% endif %}
+      </ul>
+    </div>
+  </div>
+</nav>
+
+<!-- ── Flash Messages ── -->
+<div class="container mt-3">
+  {% with messages = get_flashed_messages(with_categories=true) %}
+    {% if messages %}
+      {% for category, message in messages %}
+        <div class="alert alert-{{ category }} alert-dismissible fade show" role="alert">
+          {{ message }}
+          <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+        </div>
+      {% endfor %}
+    {% endif %}
+  {% endwith %}
+</div>
+
+<!-- ── Main Content ── -->
+<main class="container py-4">
+  {% block content %}{% endblock %}
+</main>
+
+<!-- ── Footer ── -->
+<footer>
+  <div class="container">
+    <span>🏮 神諭殿 &copy; {{ 2026 }} &nbsp;|&nbsp; 心誠則靈，問神問己</span>
+  </div>
+</footer>
+
+<!-- Bootstrap JS -->
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+{% block scripts %}{% endblock %}
+</body>
+</html>

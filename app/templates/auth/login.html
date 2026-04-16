@@ -1,0 +1,45 @@
+{% extends 'layout.html' %}
+{% block title %}登入 — 神諭殿{% endblock %}
+
+{% block content %}
+<div class="row justify-content-center">
+  <div class="col-md-5 col-lg-4">
+    <div class="card-temple p-4 mt-3">
+      <div class="text-center mb-4">
+        <div style="font-size:2.5rem;">🕯️</div>
+        <h2 style="color:var(--gold);">登入神諭殿</h2>
+        <p style="color:var(--text-muted); font-size:.9rem;">心誠則靈，登入後叩問神明</p>
+      </div>
+
+      <form method="POST" action="{{ url_for('auth.login') }}" novalidate>
+        <div class="mb-3">
+          <label for="username" class="form-label">帳號名稱</label>
+          <input
+            type="text" id="username" name="username"
+            class="form-control" required autocomplete="username"
+            placeholder="請輸入帳號"
+            value="{{ request.form.get('username', '') }}"
+          >
+        </div>
+        <div class="mb-4">
+          <label for="password" class="form-label">密碼</label>
+          <input
+            type="password" id="password" name="password"
+            class="form-control" required autocomplete="current-password"
+            placeholder="請輸入密碼"
+          >
+        </div>
+        <button type="submit" class="btn btn-gold w-100">
+          <i class="bi bi-box-arrow-in-right me-2"></i>登入
+        </button>
+      </form>
+
+      <hr class="divider-gold">
+      <p class="text-center mb-0" style="color:var(--text-muted); font-size:.9rem;">
+        還沒有帳號？
+        <a href="{{ url_for('auth.register') }}" style="color:var(--gold);">免費註冊</a>
+      </p>
+    </div>
+  </div>
+</div>
+{% endblock %}

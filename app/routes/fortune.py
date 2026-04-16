@@ -1,22 +1,42 @@
-from flask import Blueprint
+from flask import (
+    Blueprint, flash, g, redirect, render_template,
+    request, url_for, abort
+)
+from app.models.lot import Lot
+from app.models.record import Record
+from app.routes.auth import login_required
 
 fortune_bp = Blueprint('fortune', __name__)
 
+
 @fortune_bp.route('/draw', methods=['GET', 'POST'])
+@login_required
 def draw():
     """
-    處理求籤流程。
-    GET: 渲染求籤與擲筊介面 'fortune/draw.html'。
-    POST: 後端隨機抽一支籤，呼叫 Record model 把這次抽籤儲存起來。
-          成功之後重導向至 /fortune/result/<record_id> 頁面。
+    GET : 顯示求籤與擲筊介面 (fortune/draw.html)。
+    POST: 後端隨機抽一支籤 → 儲存為歷史紀錄 → 導向結果頁面。
     """
-    pass
+    if request.method == 'POST':
+        lot = Lot.get_random()
+
+        if lot is None:
+            flash('籤詩資料庫尚未建立，請聯絡管理員。', 'danger')
+            return redirect(url_for('fortune.draw'))
+
+        record_id = Record.create(user_id=g.user.id, lot_id=lot.id)
+        return redirect(url_for('fortune.result', record_id=record_id))
+
+    return render_template('fortune/draw.html')
+
 
 @fortune_bp.route('/result/<int:record_id>')
 def result(record_id):
     """
-    顯示特定紀錄的籤詩結果。
-    必須檢查紀錄是否存在。可以視實作加入分享邏輯。
-    渲染 'fortune/result.html'。
+    顯示指定抽籤紀錄的籤詩結果與解籤說明。
+    此頁面允許公開存取（方便社群分享），若紀錄不存在則回傳 404。
     """
-    pass
+    record = Record.get_by_id(record_id)
+    if record is None:
+        abort(404)
+
+    return render_template('fortune/result.html', record=record)

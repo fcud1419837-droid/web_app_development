@@ -1,0 +1,64 @@
+{% extends 'layout.html' %}
+{% block title %}我的歷史紀錄 — 神諭殿{% endblock %}
+
+{% block content %}
+<div class="d-flex justify-content-between align-items-center mb-4">
+  <h1 style="color:var(--gold); font-size:1.5rem;">
+    <i class="bi bi-clock-history me-2"></i>我的抽籤紀錄
+  </h1>
+  <a href="{{ url_for('fortune.draw') }}" class="btn btn-gold btn-sm">
+    <i class="bi bi-stars me-1"></i>再求一籤
+  </a>
+</div>
+
+{% if records %}
+  <div class="row g-3">
+    {% for record in records %}
+    <div class="col-12 col-md-6">
+      <a href="{{ url_for('fortune.result', record_id=record.id) }}" class="text-decoration-none">
+        <div class="card-temple p-3 h-100" style="transition:transform .2s; cursor:pointer;" 
+             onmouseover="this.style.transform='translateY(-3px)'" 
+             onmouseout="this.style.transform='translateY(0)'">
+          <div class="d-flex justify-content-between align-items-start mb-2">
+            <span style="color:var(--text-muted); font-size:.8rem;">
+              第 {{ record.lot.lot_number if record.lot else '?' }} 籤
+            </span>
+            {% if record.lot %}
+              {% set lot_type = record.lot.type if record.lot.type else '吉' %}
+              {% if '大吉' in lot_type %}
+                <span class="badge-lot badge-大吉" style="font-size:.75rem;">{{ lot_type }}</span>
+              {% elif '中吉' in lot_type %}
+                <span class="badge-lot badge-中吉" style="font-size:.75rem;">{{ lot_type }}</span>
+              {% elif '小吉' in lot_type %}
+                <span class="badge-lot badge-小吉" style="font-size:.75rem;">{{ lot_type }}</span>
+              {% elif '下' in lot_type %}
+                <span class="badge-lot badge-下下" style="font-size:.75rem;">{{ lot_type }}</span>
+              {% else %}
+                <span class="badge-lot badge-default" style="font-size:.75rem;">{{ lot_type }}</span>
+              {% endif %}
+            {% endif %}
+          </div>
+          {% if record.lot %}
+            <p style="color:var(--text); font-size:.9rem; margin-bottom:.5rem; line-height:1.6;">
+              {{ record.lot.poem[:60] }}{% if record.lot.poem|length > 60 %}…{% endif %}
+            </p>
+          {% endif %}
+          <p style="color:var(--text-muted); font-size:.75rem; margin:0;">
+            <i class="bi bi-calendar3 me-1"></i>{{ record.created_at }}
+          </p>
+        </div>
+      </a>
+    </div>
+    {% endfor %}
+  </div>
+{% else %}
+  <div class="card-temple p-5 text-center">
+    <div style="font-size:3rem; margin-bottom:1rem;">📜</div>
+    <h4 style="color:var(--gold);">尚無抽籤紀錄</h4>
+    <p style="color:var(--text-muted);">您還沒有進行過任何求籤，趕快去問神吧！</p>
+    <a href="{{ url_for('fortune.draw') }}" class="btn btn-gold mt-2">
+      <i class="bi bi-stars me-2"></i>立刻求籤
+    </a>
+  </div>
+{% endif %}
+{% endblock %}
